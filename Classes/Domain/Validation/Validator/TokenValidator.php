@@ -71,7 +71,7 @@ class TokenValidator extends AbstractValidator
             $properties[] = 'beGroup';
         }
 
-        foreach ($properties as $property) {
+        foreach ($properties ?? [] as $property) {
             $value = ObjectAccess::getProperty($token, $property);
 
             if ($this->isEmptyValue($value)) {

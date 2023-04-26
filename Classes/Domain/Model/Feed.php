@@ -142,7 +142,7 @@ class Feed extends AbstractEntity
     /**
      * Returns the date
      *
-     * @return \DateTime $date
+     * @return ?\DateTime $date
      */
     public function getPostDate(): ?\DateTime
     {
@@ -153,9 +153,8 @@ class Feed extends AbstractEntity
      * Sets the date
      *
      * @param \DateTime $postDate
-     * @return void
      */
-    public function setPostDate(\DateTime $postDate)
+    public function setPostDate(\DateTime $postDate): void
     {
         $this->postDate = $postDate;
     }
@@ -193,12 +192,12 @@ class Feed extends AbstractEntity
      */
     public function getDecodedMessage(): string
     {
-        return json_decode(
+        return strval(json_decode(
             sprintf(
                 '"%s"',
                 $this->message
             )
-        );
+        ));
     }
 
     /**
@@ -311,7 +310,7 @@ class Feed extends AbstractEntity
     /**
      * @param string $externalIdentifier
      */
-    public function setExternalIdentifier(string $externalIdentifier)
+    public function setExternalIdentifier(string $externalIdentifier): void
     {
         $this->externalIdentifier = $externalIdentifier;
     }
@@ -325,9 +324,9 @@ class Feed extends AbstractEntity
     }
 
     /**
-     * @param int $updateDate
+     * @param \DateTime $updateDate
      */
-    public function setUpdateDate(\DateTime $updateDate)
+    public function setUpdateDate(\DateTime $updateDate): void
     {
         $this->updateDate = $updateDate;
     }
@@ -343,7 +342,7 @@ class Feed extends AbstractEntity
     /**
      * @param int $likes
      */
-    public function setLikes(int $likes)
+    public function setLikes(int $likes): void
     {
         $this->likes = $likes;
     }
@@ -359,7 +358,7 @@ class Feed extends AbstractEntity
     /**
      * @param int $type
      */
-    public function setType(int $type)
+    public function setType(int $type): void
     {
         $this->type = $type;
     }
@@ -380,7 +379,7 @@ class Feed extends AbstractEntity
      * @param int $mediaType
      * @return void
      */
-    public function setMediaType(int $mediaType)
+    public function setMediaType(int $mediaType) : void
     {
         $this->mediaType = $mediaType;
     }

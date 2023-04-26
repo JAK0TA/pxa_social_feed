@@ -73,7 +73,7 @@ class FeedRepository extends Repository
      *
      * @param ObjectStorage $storage
      * @param Configuration $configuration
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface<QueryResult>
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface<Feed>
      */
     public function findNotInStorage(ObjectStorage $storage, Configuration $configuration)
     {
@@ -94,9 +94,9 @@ class FeedRepository extends Repository
      *
      * @param array $configurations
      * @param int $limit
-     * @return QueryResult
+     * @return QueryResult<Feed>
      */
-    public function findByConfigurations(array $configurations, int $limit = 0)
+    public function findByConfigurations(array $configurations, int $limit = 0): QueryResult
     {
         $query = $this->createQuery();
 
@@ -121,7 +121,7 @@ class FeedRepository extends Repository
      *
      * @param string $externalIdentifier
      * @param int $pid
-     * @return Feed|object
+     * @return Feed|null
      */
     public function findOneByExternalIdentifier(string $externalIdentifier, int $pid): ?Feed
     {

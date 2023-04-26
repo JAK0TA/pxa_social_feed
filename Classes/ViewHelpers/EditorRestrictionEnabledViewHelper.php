@@ -17,7 +17,7 @@ class EditorRestrictionEnabledViewHelper extends AbstractConditionViewHelper
     /**
      * Check if feature enable in plugin settings
      *
-     * @param array $arguments
+     * @param array<string, mixed> $arguments
      * @param RenderingContextInterface $renderingContext
      * @return bool
      */
