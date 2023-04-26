@@ -27,12 +27,15 @@ namespace Pixelant\PxaSocialFeed\Domain\Repository;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
 use Pixelant\PxaSocialFeed\Domain\Model\Token;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
  * The repository for Feeds
+ * 
+ * @extends \TYPO3\CMS\Extbase\Persistence\Repository<Configuration>
  */
 class ConfigurationRepository extends AbstractBackendRepository
 {
@@ -48,7 +51,7 @@ class ConfigurationRepository extends AbstractBackendRepository
      * Find by uids list
      *
      * @param array $configurations
-     * @return QueryResultInterface
+     * @return QueryResultInterface<Configuration>
      */
     public function findByUids(array $configurations): QueryResultInterface
     {
@@ -63,7 +66,7 @@ class ConfigurationRepository extends AbstractBackendRepository
      * Get configurations by token
      *
      * @param Token $token
-     * @return QueryResultInterface
+     * @return QueryResultInterface<Configuration>
      */
     public function findConfigurationByToken(Token $token): QueryResultInterface
     {

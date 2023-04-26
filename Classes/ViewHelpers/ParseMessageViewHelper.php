@@ -28,15 +28,16 @@ class ParseMessageViewHelper extends AbstractViewHelper
 
     /**
      * Arguments initializations
+     * @return void
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument('message', 'string', 'Feed message', false, '');
         $this->registerArgument('type', 'integer', 'Feed type', true);
     }
 
     /**
-     * @param array $arguments
+     * @param array<string, mixed> $arguments
      * @param \Closure $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
      * @return string

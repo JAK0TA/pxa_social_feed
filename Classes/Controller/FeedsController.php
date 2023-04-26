@@ -43,8 +43,9 @@ class FeedsController extends ActionController
 
     /**
      * @param FeedRepository $feedRepository
+     * @return void
      */
-    public function injectFeedRepository(FeedRepository $feedRepository)
+    public function injectFeedRepository(FeedRepository $feedRepository): void
     {
         $this->feedRepository = $feedRepository;
     }
