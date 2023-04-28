@@ -27,7 +27,7 @@ abstract class BaseUpdater implements FeedUpdaterInterface
     /**
      * Keep all processed feed items
      *
-     * @var ObjectStorage
+     * @var ObjectStorage<Feed>
      */
     protected $feeds = null;
 

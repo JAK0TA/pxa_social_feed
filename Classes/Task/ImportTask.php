@@ -122,7 +122,7 @@ class ImportTask extends AbstractTask
     /**
      * @param array $configurations
      */
-    public function setConfigurations(array $configurations)
+    public function setConfigurations(array $configurations): void
     {
         $this->configurations = $configurations;
     }

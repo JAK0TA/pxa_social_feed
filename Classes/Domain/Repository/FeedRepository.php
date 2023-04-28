@@ -41,7 +41,6 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
  */
 class FeedRepository extends Repository
 {
-
     /**
      * @var array $defaultOrderings
      */
@@ -52,7 +51,7 @@ class FeedRepository extends Repository
     /**
      * Default query settings
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
         $defaultQuerySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
 

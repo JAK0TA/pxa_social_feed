@@ -43,7 +43,7 @@ abstract class AbstractBackendRepository extends Repository
     /**
      * Initialize default settings
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
         /** @var Typo3QuerySettings $defaultQuerySettings */
         $defaultQuerySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);

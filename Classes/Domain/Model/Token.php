@@ -33,6 +33,7 @@ use Pixelant\PxaSocialFeed\Provider\Facebook;
 use League\OAuth2\Client\Token\AccessToken;
 use Pixelant\PxaSocialFeed\Feed\Source\FacebookSource;
 use Pixelant\PxaSocialFeed\SignalSlot\EmitSignalTrait;
+use TYPO3\CMS\Extbase\Domain\Model\BackendUserGroup;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -283,7 +284,7 @@ class Token extends AbstractEntity
     }
 
     /**
-     * @return ObjectStorage
+     * @return ObjectStorage<BackendUserGroup>
      */
     public function getBeGroup(): ObjectStorage
     {
@@ -291,7 +292,7 @@ class Token extends AbstractEntity
     }
 
     /**
-     * @param ObjectStorage $beGroup
+     * @param ObjectStorage<BackendUserGroup> $beGroup
      */
     public function setBeGroup(ObjectStorage $beGroup): void
     {

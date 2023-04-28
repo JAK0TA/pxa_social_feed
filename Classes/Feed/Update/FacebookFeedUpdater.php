@@ -43,7 +43,7 @@ class FacebookFeedUpdater extends BaseUpdater
      * Update single facebook item
      *
      * @param Feed $feedItem
-     * @param array $rawData
+     * @param array<string, mixed> $rawData
      * @param Configuration $configuration
      */
     protected function updateFeedItem(Feed $feedItem, array $rawData, Configuration $configuration): void
@@ -68,7 +68,7 @@ class FacebookFeedUpdater extends BaseUpdater
      * Update facebook data
      *
      * @param Feed $feed
-     * @param array $rawData
+     * @param array<string, mixed> $rawData
      */
     protected function setFacebookData(Feed $feed, array $rawData): void
     {
@@ -89,7 +89,7 @@ class FacebookFeedUpdater extends BaseUpdater
     /**
      * Create new feed item
      *
-     * @param array $rawData
+     * @param array<string, mixed> $rawData
      * @param Configuration $configuration
      * @return Feed
      */

@@ -337,7 +337,7 @@ class AdministrationController extends ActionController
      *
      * @param Configuration $configuration
      */
-    public function runConfigurationAction(Configuration $configuration)
+    public function runConfigurationAction(Configuration $configuration): void
     {
         $importService = GeneralUtility::makeInstance(ImportFeedsTaskService::class);
         try {
@@ -367,7 +367,7 @@ class AdministrationController extends ActionController
      * Assign BE groups to template
      * If admin all are available
      */
-    protected function assignBEGroups()
+    protected function assignBEGroups(): void
     {
         if (!ConfigurationUtility::isFeatureEnabled('editorRestriction')) {
             return;
@@ -391,7 +391,7 @@ class AdministrationController extends ActionController
      *
      * @param string $key
      * @param array|null $arguments
-     * @return string
+     * @return string|null
      */
     protected function translate(string $key, array $arguments = null): ?string
     {
@@ -455,10 +455,10 @@ class AdministrationController extends ActionController
     /**
      * Check if instagram and facebook tokens has access token
      *
-     * @param $tokens
+     * @param QueryResultInterface<Token> $tokens
      * @return bool
      */
-    protected function isTokensValid($tokens): bool
+    protected function isTokensValid(QueryResultInterface $tokens): bool
     {
         /** @var Token $token */
         foreach ($tokens as $token) {
@@ -490,7 +490,7 @@ class AdministrationController extends ActionController
      * @param string|null $message
      * @param int $severity
      */
-    protected function redirectToIndexTokenTab(string $message = null, int $severity = FlashMessage::OK)
+    protected function redirectToIndexTokenTab(string $message = null, int $severity = FlashMessage::OK): void
     {
         if (!empty($message)) {
             $this->addFlashMessage(
@@ -509,7 +509,7 @@ class AdministrationController extends ActionController
      * @param string|null $message
      * @param int $severity
      */
-    protected function redirectToIndex(string $message = null, int $severity = FlashMessage::OK)
+    protected function redirectToIndex(string $message = null, int $severity = FlashMessage::OK): void
     {
         if (!empty($message)) {
             $this->addFlashMessage(

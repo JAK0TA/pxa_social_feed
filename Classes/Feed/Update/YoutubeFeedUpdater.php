@@ -47,7 +47,7 @@ class YoutubeFeedUpdater extends BaseUpdater
      * Update youtube feed item
      *
      * @param Feed $feedItem
-     * @param array $rawData
+     * @param array<string, mixed> $rawData
      */
     protected function updateFeedItem(Feed $feedItem, array $rawData): void
     {
@@ -70,7 +70,7 @@ class YoutubeFeedUpdater extends BaseUpdater
     /**
      * Create new feed item
      *
-     * @param array $rawData
+     * @param array<string, mixed> $rawData
      * @param Configuration $configuration
      * @return Feed
      */

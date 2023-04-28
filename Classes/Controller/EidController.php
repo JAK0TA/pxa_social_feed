@@ -6,6 +6,7 @@ namespace Pixelant\PxaSocialFeed\Controller;
 
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Token\AccessTokenInterface;
 use Pixelant\PxaSocialFeed\Domain\Repository\TokenRepository;
 use Pixelant\PxaSocialFeed\Exception\FacebookObtainAccessTokenException;
 use Pixelant\PxaSocialFeed\Feed\Source\FacebookSource;
@@ -185,10 +186,10 @@ class EidController
      * Get user access token
      *
      * @param Facebook $fb
-     * @return AccessToken
+     * @return AccessTokenInterface
      * @throws FacebookObtainAccessTokenException
      */
-    protected function obtainAccessToken(Facebook $fb): AccessToken
+    protected function obtainAccessToken(Facebook $fb): AccessTokenInterface
     {
         // If we don't have an authorization code then get one
         if (!isset($_GET['code'])) {

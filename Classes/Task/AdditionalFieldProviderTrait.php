@@ -40,7 +40,7 @@ trait AdditionalFieldProviderTrait
      * @param int $severity Optional severity, must be one of \TYPO3\CMS\Core\Messaging\FlashMessage constants
      * @throws \InvalidArgumentException if the message body is no string
      */
-    protected function addMessage(string $messageBody, int $severity = AbstractMessage::OK)
+    protected function addMessage(string $messageBody, int $severity = AbstractMessage::OK): void
     {
         if (!is_string($messageBody)) {
             throw new \InvalidArgumentException(
