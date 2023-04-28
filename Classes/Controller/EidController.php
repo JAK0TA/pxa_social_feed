@@ -223,15 +223,6 @@ class EidController
             throw $accessTokenException;
         }
 
-        if (!isset($accessToken)) {
-            $accessTokenException = new FacebookObtainAccessTokenException(
-                'Bad request',
-                1562673399351
-            );
-            $accessTokenException->setStatusCode(400);
-            throw $accessTokenException;
-        }
-
         return $accessToken;
     }
 
