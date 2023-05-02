@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pixelant\PxaSocialFeed\Controller;
 
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use League\OAuth2\Client\Provider\LinkedIn;
 use League\OAuth2\Client\Token\AccessToken;
 use Pixelant\PxaSocialFeed\Domain\Repository\TokenRepository;
 use Pixelant\PxaSocialFeed\Exception\FacebookObtainAccessTokenException;
@@ -15,6 +16,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Class EidController
@@ -68,18 +70,55 @@ class EidController
 
         if ($appId && $appSecret) {
             try {
-                $fb = new Facebook(
+              DebuggerUtility::var_dump($appId);
+              DebuggerUtility::var_dump($appSecret);
+              DebuggerUtility::var_dump($_GET['code']);
+              $client  =   
+              
+               new LinkedIn (
                     [
                         'clientId' => $appId,
                         'clientSecret' => $appSecret,
                         'redirectUri' => $this->buildRedirectUrl($tokenUid),
-                        'graphApiVersion' => FacebookSource::GRAPH_VERSION,
                     ]
                 );
+                $token = $client->getAccessToken('authorization_code', [
+                  'code' => $_GET['code']
+              ]);
 
-                $accessToken = $this->obtainAccessToken($fb);
+              $user = $client->getResourceOwner($token);
 
-                $this->getAndPersistLongLivedAccessToken($fb, $accessToken, $tokenUid, $response);
+              DebuggerUtility::var_dump($user);
+              // DebuggerUtility::var_dump($tokenData->getAAccessToken());
+              // $accessToken = new AccessToken($tokenData['accessToken'], $tokenData['expires']);
+
+              // set token for client
+              // $client->setAccessToken($tokenData);
+
+
+              $profile = $client->get(
+                'organizations',
+                ['is-company-admin' => true]
+            );
+            DebuggerUtility::var_dump($profile);
+
+
+
+              DebuggerUtility::var_dump($_GET['code']);
+              DebuggerUtility::var_dump($appId);
+              die();
+              // $fb = new Facebook(
+                //     [
+                //         'clientId' => $appId,
+                //         'clientSecret' => $appSecret,
+                //         'redirectUri' => $this->buildRedirectUrl($tokenUid),
+                //         'graphApiVersion' => FacebookSource::GRAPH_VERSION,
+                //     ]
+                // );
+
+                // $accessToken = $this->obtainAccessToken($fb);
+
+                // $this->getAndPersistLongLivedAccessToken($fb, $accessToken, $tokenUid, $response);
             } catch (FacebookObtainAccessTokenException $exception) {
                 // Get error and return response
                 $response = $response->withStatus($exception->getStatusCode());
