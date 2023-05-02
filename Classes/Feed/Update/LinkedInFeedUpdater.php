@@ -16,5 +16,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class LinkedInFeedUpdater extends BaseUpdater
 {
-
+    /**
+     * Create/Update feed items
+     *
+     * @param FeedSourceInterface $source
+     */
+    public function update(FeedSourceInterface $source): void
+    {
+        $items = $source->load();
+    }
 }

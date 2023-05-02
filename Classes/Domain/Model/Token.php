@@ -29,6 +29,7 @@ namespace Pixelant\PxaSocialFeed\Domain\Model;
  ***************************************************************/
 
 use League\OAuth2\Client\Provider\Exception\FacebookProviderException;
+use League\OAuth2\Client\Provider\LinkedIn;
 use Pixelant\PxaSocialFeed\Provider\Facebook;
 use League\OAuth2\Client\Token\AccessToken;
 use Pixelant\PxaSocialFeed\Feed\Source\FacebookSource;
@@ -36,6 +37,7 @@ use Pixelant\PxaSocialFeed\SignalSlot\EmitSignalTrait;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -69,6 +71,11 @@ class Token extends AbstractEntity
      * facebook page token
      */
     const FACEBOOK_PAGE = 5;
+
+    /**
+     * linkedin token
+     */
+    const LINKEDIN = 6;
 
     /**
      * Default PID
@@ -127,6 +134,12 @@ class Token extends AbstractEntity
      * @var ?Facebook
      */
     protected $fb = null;
+
+
+    /**
+     * @var ?LinkedIn
+     */
+    protected $linkedIn = null;
 
     /**
      * @var string
@@ -374,6 +387,9 @@ class Token extends AbstractEntity
      */
     public function getFacebookLoginUrl(string $clientId, string $clientSecret, string $redirectUrl, array $permissions)
     {
+   
+
+    return $this->getLinkedInLoginUrl($clientId, $clientSecret, $redirectUrl, $permissions);
         // required by SDK login
         session_start();
 
@@ -381,6 +397,18 @@ class Token extends AbstractEntity
         return $fb->getAuthorizationUrl([
             'scope' => $permissions,
         ]) . '&bypass=1';
+    }
+
+
+
+    public function getLinkedInLoginUrl(string $clientId, string $clientSecret, string $redirectUrl, array $permissions){
+      
+      $linkedIn = $this->getLinkedIn($clientId, $clientSecret, $redirectUrl);
+    return  $linkedIn->getAuthorizationUrl([
+      'state' => 'OPTIONAL_CUSTOM_CONFIGURED_STATE',
+      'scope' => ['r_liteprofile','r_emailaddress']
+    ]);
+    
     }
 
     /**
@@ -493,6 +521,16 @@ class Token extends AbstractEntity
         return $this->type === static::YOUTUBE;
     }
 
+        /**
+     * Check if it's of type linkedIn
+     *
+     * @return bool
+     */
+    public function isLinkedInType(): bool
+    {
+        return $this->type === static::LINKEDIN;
+    }
+
     /**
      * Get FB
      *
@@ -514,6 +552,32 @@ class Token extends AbstractEntity
         return $this->fb;
     }
 
+
+    /**
+     * Get LinkedIn
+     *
+     * @return LinkedIn
+     */
+    public function getLinkedIn(string $clientId = '', string $clientSecret = '', string $redirectUri = ''): LinkedIn
+    {
+
+
+
+        if ($this->linkedIn === null) {
+            $this->linkedIn = new LinkedIn(
+                [
+          'clientId'          => $clientId,
+        'clientSecret'      => $clientSecret,
+        'redirectUri'       => $redirectUri,
+                ]
+            );
+        }
+
+        return $this->linkedIn;
+    }
+
+
+
     /**
      * Return all available types
      *
@@ -526,6 +590,7 @@ class Token extends AbstractEntity
             static::INSTAGRAM,
             static::TWITTER,
             static::YOUTUBE,
+            static::LINKEDIN,
         ];
     }
 }
