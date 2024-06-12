@@ -30,10 +30,10 @@ namespace Pixelant\PxaSocialFeed\Domain\Model;
  ***************************************************************/
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Extbase\Domain\Model\BackendUserGroup;
-use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup;
+use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 
 /**
  * Configuration

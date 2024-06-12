@@ -59,10 +59,10 @@ class TokenRepository extends AbstractBackendRepository
         $query->getQuerySettings()->setIgnoreEnableFields(true);
 
         $query->matching(
-            $query->logicalAnd([
+            $query->logicalAnd(
                 $query->equals('parentToken', $token->getParentToken()),
                 $query->equals('fbSocialId', $fbSocialId),
-            ])
+            )
         );
 
         $query->setLimit(1);

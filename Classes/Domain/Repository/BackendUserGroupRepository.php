@@ -11,7 +11,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Class BackendUserGroupRepository
  */
-class BackendUserGroupRepository
+class BackendUserGroupRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendUserGroupRepository
 {
     /**
      * Find all BE user groups

@@ -134,7 +134,7 @@ class FeedRepository extends Repository
             $query->equals('externalIdentifier', $externalIdentifier),
         ];
 
-        $query->matching($query->logicalAnd($logicalAnd));
+        $query->matching($query->logicalAnd(...$logicalAnd));
 
         return $query->execute()->getFirst();
     }

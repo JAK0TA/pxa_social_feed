@@ -81,7 +81,7 @@ class Token extends AbstractEntity
     protected $pid = 0;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\BackendUserGroup>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup>
      * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
     protected $beGroup;
