@@ -27,11 +27,11 @@ namespace Pixelant\PxaSocialFeed\Domain\Repository;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Pixelant\PxaSocialFeed\Database\Query\Restriction\BackendGroupRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser;
-use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\Repository;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 
 /**
  * Class AbstractRepository
@@ -56,19 +56,24 @@ abstract class AbstractBackendRepository extends Repository
 
     /**
      * Find all records with backend user group restriction
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
-    public function findAllBackendGroupRestriction()
+    public function findAllBackendGroupRestriction(): QueryResultInterface
     {
-        $query = $this->createQuery();
-        $queryParser = GeneralUtility::makeInstance(Typo3DbQueryParser::class);
+      /** @var BackendUserAuthentication|null $backendUser */
+      $backendUser = $GLOBALS['BE_USER'];
+      $query = $this->createQuery();
+      
+      if($backendUser && !$backendUser->isAdmin()) {
+        $query->matching(
+          $query->logicalOr(
+            $query->equals("be_group", NULL),
+            $query->equals("be_group", ""),
+            $query->equals("be_group", "0"),
+            $query->in("be_group", $backendUser->userGroupsUID)
+          ),
+        );
+      }
 
-        $queryBuilder = $queryParser->convertQueryToDoctrineQueryBuilder($query);
-        $queryBuilder
-            ->getRestrictions()
-            ->add(GeneralUtility::makeInstance(BackendGroupRestriction::class));
-
-        return $query->statement($queryBuilder->getSQL(), $queryBuilder->getParameters())->execute();
+      return $query->execute();
     }
 }
