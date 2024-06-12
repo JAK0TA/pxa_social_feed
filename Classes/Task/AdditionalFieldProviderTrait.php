@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Task;
 
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
 
 /**
@@ -29,7 +29,7 @@ trait AdditionalFieldProviderTrait
     protected function getAction(SchedulerModuleController $schedulerModuleController): string
     {
         return method_exists($schedulerModuleController, 'getCurrentAction')
-            ? (string)$schedulerModuleController->getCurrentAction()
+            ? strval($schedulerModuleController->getCurrentAction())
             : $schedulerModuleController->CMD;
     }
 
@@ -40,7 +40,7 @@ trait AdditionalFieldProviderTrait
      * @param int $severity Optional severity, must be one of \TYPO3\CMS\Core\Messaging\FlashMessage constants
      * @throws \InvalidArgumentException if the message body is no string
      */
-    protected function addMessage(string $messageBody, int $severity = AbstractMessage::OK): void
+    protected function addMessage(string $messageBody, ContextualFeedbackSeverity $severity = ContextualFeedbackSeverity::OK): void
     {
         if (!is_string($messageBody)) {
             throw new \InvalidArgumentException(

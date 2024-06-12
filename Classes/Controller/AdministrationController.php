@@ -8,14 +8,15 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Fluid\View\TemplateView;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use Pixelant\PxaSocialFeed\Domain\Model\Feed;
+use TYPO3\CMS\Backend\Attribute\AsController;
 use Pixelant\PxaSocialFeed\Domain\Model\Token;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -29,7 +30,6 @@ use Pixelant\PxaSocialFeed\Service\Task\ImportFeedsTaskService;
 use Pixelant\PxaSocialFeed\Domain\Repository\ConfigurationRepository;
 use Pixelant\PxaSocialFeed\Domain\Repository\AbstractBackendRepository;
 use Pixelant\PxaSocialFeed\Domain\Repository\BackendUserGroupRepository;
-use TYPO3\CMS\Backend\Attribute\AsController;
 
 /***************************************************************
  *
@@ -212,7 +212,7 @@ final class AdministrationController extends ActionController
 
         return $this->redirectToIndexTokenTab(
             $this->translate('error_token_configuration_exist', [$tokenConfigurations->getFirst()->getName()]),
-            FlashMessage::ERROR
+            ContextualFeedbackSeverity::ERROR
         );
     }
 
@@ -290,7 +290,7 @@ final class AdministrationController extends ActionController
         try {
             $importService->import([ $configuration->getUid() ]);
         } catch (\Exception $e) {
-            $this->redirectToIndex($e->getMessage(), FlashMessage::ERROR);
+            $this->redirectToIndex($e->getMessage(), ContextualFeedbackSeverity::ERROR);
         }
 
         return $this->redirectToIndex($this->translate('single_import_end'));
@@ -433,7 +433,7 @@ final class AdministrationController extends ActionController
      * @param string|null $message
      * @param int $severity
      */
-    protected function redirectToIndexTokenTab(string $message = null, int $severity = FlashMessage::OK): ResponseInterface
+    protected function redirectToIndexTokenTab(string $message = null, ContextualFeedbackSeverity $severity = ContextualFeedbackSeverity::OK): ResponseInterface
     {
         if (!empty($message)) {
             $this->addFlashMessage(
@@ -452,7 +452,7 @@ final class AdministrationController extends ActionController
      * @param string|null $message
      * @param int $severity
      */
-    protected function redirectToIndex(string $message = null, int $severity = FlashMessage::OK): ResponseInterface
+    protected function redirectToIndex(string $message = null, ContextualFeedbackSeverity $severity = ContextualFeedbackSeverity::OK): ResponseInterface
     {
         if (!empty($message)) {
             $this->addFlashMessage(

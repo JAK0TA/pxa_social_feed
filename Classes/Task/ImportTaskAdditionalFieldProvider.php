@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Task;
 
-use Pixelant\PxaSocialFeed\Utility\SchedulerUtility;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Scheduler\Task\AbstractTask;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
+use Pixelant\PxaSocialFeed\Utility\SchedulerUtility;
 use TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface;
 use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
-use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
 /***************************************************************
  *
@@ -113,11 +114,11 @@ class ImportTaskAdditionalFieldProvider implements AdditionalFieldProviderInterf
         if (!isset($submittedData['pxasocialfeed_run_all_configs'])
             && !isset($submittedData['pxasocialfeed_configs'])
         ) {
-            $this->addMessage('Wrong configurations select', FlashMessage::ERROR);
+            $this->addMessage('Wrong configurations select', ContextualFeedbackSeverity::ERROR);
         } elseif (!$this->isValidEmail($submittedData['pxasocialfeed_sender_email'])
             || !$this->isValidEmail($submittedData['pxasocialfeed_receiver_email'])
         ) {
-            $this->addMessage('Please provide a valid email address.', FlashMessage::ERROR);
+            $this->addMessage('Please provide a valid email address.', ContextualFeedbackSeverity::ERROR);
         } else {
             $valid = true;
         }
