@@ -14,7 +14,6 @@ use Pixelant\PxaSocialFeed\Domain\Model\Feed;
 use TYPO3\CMS\Backend\Attribute\AsController;
 use Pixelant\PxaSocialFeed\Domain\Model\Token;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
@@ -77,7 +76,7 @@ final class AdministrationController extends ActionController
      *
      * @param TemplateView $view
      */
-    protected function initializeView(TemplateView $view): void
+    protected function initializeView(): void
     {
         $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         // create select box menu
@@ -354,11 +353,6 @@ final class AdministrationController extends ActionController
      */
     protected function createMenu(): void
     {
-        /** @var UriBuilder $uriBuilder */
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        $uriBuilder->setRequest($this->request);
-
-
         $menu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
         $menu->setIdentifier('pxa_social_feed');
 
@@ -371,7 +365,7 @@ final class AdministrationController extends ActionController
         foreach ($actions as $action) {
             $item = $menu->makeMenuItem()
                 ->setTitle($this->translate($action . 'Action'))
-                ->setHref($uriBuilder->reset()->uriFor($action, ["token" => null], 'Administration'))
+                ->setHref($this->uriBuilder->reset()->uriFor($action, ["token" => null], 'Administration'))
                 ->setActive($this->request->getControllerActionName() === $action);
 
             $menu->addMenuItem($item);
