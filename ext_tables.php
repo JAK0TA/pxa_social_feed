@@ -1,9 +1,12 @@
 <?php
 
-defined('TYPO3_MODE') or die();
+use TYPO3\CMS\Core\Http\ApplicationType;
+use Psr\Http\Message\ServerRequestInterface;
+
+defined('TYPO3') or die();
 
 (function () {
-    if (TYPO3_MODE === 'BE') {
+    if (($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof ServerRequestInterface && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
         /**
          * Registers a Backend Module
          */
