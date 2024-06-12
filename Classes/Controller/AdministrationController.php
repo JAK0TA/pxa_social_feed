@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Controller;
 
-use JAKOTA\Typo3ToolBox\Utility\DebuggerUtility;
-use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Fluid\View\TemplateView;
 use Psr\Http\Message\ResponseInterface;
@@ -14,7 +12,6 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use Pixelant\PxaSocialFeed\Domain\Model\Feed;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use Pixelant\PxaSocialFeed\Domain\Model\Token;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;

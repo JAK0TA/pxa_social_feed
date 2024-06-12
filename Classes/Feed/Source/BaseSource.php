@@ -9,7 +9,6 @@ use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
-use Pixelant\PxaSocialFeed\SignalSlot\EmitSignalTrait;
 use Pixelant\PxaSocialFeed\Exception\BadResponseException;
 
 /**
@@ -17,15 +16,13 @@ use Pixelant\PxaSocialFeed\Exception\BadResponseException;
  */
 abstract class BaseSource implements FeedSourceInterface
 {
-    use EmitSignalTrait;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @param Configuration $configuration
-     */
     public function __construct(
       protected Configuration $configuration,
-      protected EventDispatcherInterface $eventDispatcher
-    ) {}
+    ) {
+      $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
+    }
 
     /**
      * Get configuration

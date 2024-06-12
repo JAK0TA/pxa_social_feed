@@ -20,7 +20,6 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Doctrine\DBAL\Driver\Exception as DriverException;
 use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
 use Pixelant\PxaSocialFeed\Domain\Model\FileReference;
-use Pixelant\PxaSocialFeed\SignalSlot\EmitSignalTrait;
 use Pixelant\PxaSocialFeed\Domain\Repository\FeedRepository;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
@@ -38,8 +37,6 @@ use TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsExcepti
  */
 abstract class BaseUpdater implements FeedUpdaterInterface
 {
-    use EmitSignalTrait;
-
     /**
      * Keep all processed feed items
      *
@@ -47,15 +44,21 @@ abstract class BaseUpdater implements FeedUpdaterInterface
      */
     protected $feeds;
 
+    protected EventDispatcherInterface $eventDispatcher;
+    
+    protected MimeTypeDetector $mimeTypeDetector;
+
+    protected FeedRepository $feedRepository;
+
     /**
      * BaseUpdater constructor.
      */
     public function __construct(
-      protected EventDispatcherInterface $eventDispatcher,
-      protected MimeTypeDetector $mimeTypeDetector,
-      protected FeedRepository $feedRepository,
     ) {
         $this->feeds = new ObjectStorage();
+        $this->feedRepository = GeneralUtility::makeInstance(FeedRepository::class);
+        $this->mimeTypeDetector = GeneralUtility::makeInstance(MimeTypeDetector::class);
+        $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
     }
 
     /**

@@ -34,7 +34,6 @@ use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
 use Pixelant\PxaSocialFeed\Feed\Source\FacebookSource;
 use Pixelant\PxaSocialFeed\Provider\Facebook;
-use Pixelant\PxaSocialFeed\SignalSlot\EmitSignalTrait;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -44,8 +43,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class Token extends AbstractEntity
 {
-    use EmitSignalTrait;
-
     /**
      * facebook user token
      */
