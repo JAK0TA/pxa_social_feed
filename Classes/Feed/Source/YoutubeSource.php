@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pixelant\PxaSocialFeed\Feed\Source;
 
 use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
+use Pixelant\PxaSocialFeed\Event\YoutubeEndPointRequestFieldsEvent;
 use Pixelant\PxaSocialFeed\Exception\BadResponseException;
 use Pixelant\PxaSocialFeed\Exception\InvalidFeedSourceData;
 use Psr\Http\Message\ResponseInterface;
@@ -94,8 +95,8 @@ class YoutubeSource extends BaseSource
             'key' => $configuration->getToken()->getApiKey(),
         ];
 
-        list($fields) = $this->emitSignal('youtubeEndPointRequestFields', [$fields]);
-
-        return $fields;
+        /** @var YoutubeEndPointRequestFieldsEvent $event */
+        $event = $this->eventDispatcher->dispatch(new YoutubeEndPointRequestFieldsEvent($fields));
+        return $event->getFields();
     }
 }

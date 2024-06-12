@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Source;
 
-use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
-use Pixelant\PxaSocialFeed\Exception\BadResponseException;
-use Pixelant\PxaSocialFeed\SignalSlot\EmitSignalTrait;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
+use Pixelant\PxaSocialFeed\SignalSlot\EmitSignalTrait;
+use Pixelant\PxaSocialFeed\Exception\BadResponseException;
 
 /**
  * Class BaseSource
@@ -19,17 +20,12 @@ abstract class BaseSource implements FeedSourceInterface
     use EmitSignalTrait;
 
     /**
-     * @var Configuration
-     */
-    protected $configuration;
-
-    /**
      * @param Configuration $configuration
      */
-    public function __construct(Configuration $configuration)
-    {
-        $this->configuration = $configuration;
-    }
+    public function __construct(
+      protected Configuration $configuration,
+      protected EventDispatcherInterface $eventDispatcher
+    ) {}
 
     /**
      * Get configuration

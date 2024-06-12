@@ -4,33 +4,34 @@ declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Update;
 
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\Exception as DriverException;
 use Exception;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use InvalidArgumentException;
-use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
-use Pixelant\PxaSocialFeed\Domain\Model\Feed;
-use Pixelant\PxaSocialFeed\Domain\Model\FileReference;
-use Pixelant\PxaSocialFeed\Domain\Repository\FeedRepository;
-use Pixelant\PxaSocialFeed\SignalSlot\EmitSignalTrait;
 use RuntimeException;
-use TYPO3\CMS\Core\Resource\Exception\ExistingTargetFolderException;
-use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
-use TYPO3\CMS\Core\Resource\Exception\IllegalFileExtensionException;
-use TYPO3\CMS\Core\Resource\Exception\InsufficientFileWritePermissionsException;
-use TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException;
-use TYPO3\CMS\Core\Resource\Exception\InsufficientFolderWritePermissionsException;
-use TYPO3\CMS\Core\Resource\Exception\InsufficientUserPermissionsException;
+use GuzzleHttp\Client;
+use InvalidArgumentException;
+use Doctrine\DBAL\DBALException;
 use TYPO3\CMS\Core\Resource\File;
-use TYPO3\CMS\Core\Resource\MimeTypeDetector;
-use TYPO3\CMS\Core\Resource\ResourceFactory;
+use GuzzleHttp\Exception\GuzzleException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
+use Pixelant\PxaSocialFeed\Domain\Model\Feed;
+use TYPO3\CMS\Core\Resource\MimeTypeDetector;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Doctrine\DBAL\Driver\Exception as DriverException;
+use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
+use Pixelant\PxaSocialFeed\Domain\Model\FileReference;
+use Pixelant\PxaSocialFeed\SignalSlot\EmitSignalTrait;
+use Pixelant\PxaSocialFeed\Domain\Repository\FeedRepository;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
-use TYPO3\CMS\Extbase\Reflection\ClassSchema\Exception\NoSuchPropertyException;
+use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Extbase\Reflection\Exception\UnknownClassException;
+use TYPO3\CMS\Core\Resource\Exception\ExistingTargetFolderException;
+use TYPO3\CMS\Core\Resource\Exception\IllegalFileExtensionException;
+use TYPO3\CMS\Core\Resource\Exception\InsufficientUserPermissionsException;
+use TYPO3\CMS\Extbase\Reflection\ClassSchema\Exception\NoSuchPropertyException;
+use TYPO3\CMS\Core\Resource\Exception\InsufficientFileWritePermissionsException;
+use TYPO3\CMS\Core\Resource\Exception\InsufficientFolderWritePermissionsException;
+use TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException;
 
 /**
  * Class BaseUpdater
@@ -40,11 +41,6 @@ abstract class BaseUpdater implements FeedUpdaterInterface
     use EmitSignalTrait;
 
     /**
-     * @var FeedRepository
-     */
-    protected $feedRepository;
-
-    /**
      * Keep all processed feed items
      *
      * @var ObjectStorage<Feed>
@@ -52,17 +48,13 @@ abstract class BaseUpdater implements FeedUpdaterInterface
     protected $feeds;
 
     /**
-     * @var MimeTypeDetector
-     */
-    protected $mimeTypeDetector;
-
-    /**
      * BaseUpdater constructor.
      */
-    public function __construct()
-    {
-        $this->mimeTypeDetector = GeneralUtility::makeInstance(MimeTypeDetector::class);
-        $this->feedRepository = GeneralUtility::makeInstance(FeedRepository::class);
+    public function __construct(
+      protected EventDispatcherInterface $eventDispatcher,
+      protected MimeTypeDetector $mimeTypeDetector,
+      protected FeedRepository $feedRepository,
+    ) {
         $this->feeds = new ObjectStorage();
     }
 

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Source;
 
+use Psr\Http\Message\ResponseInterface;
 use Pixelant\PxaSocialFeed\Exception\BadResponseException;
 use Pixelant\PxaSocialFeed\Exception\InvalidFeedSourceData;
-use Psr\Http\Message\ResponseInterface;
+use Pixelant\PxaSocialFeed\Event\BeforeReturnTwitterQueryFieldsEvent;
 
 /**
  * Class TwitterSource
@@ -117,9 +118,9 @@ class TwitterV2Source extends BaseSource
             'exclude' => 'replies',
         ];
 
-        [$fields] = $this->emitSignal('beforeReturnTwitterQueryFields', [$fields]);
-
-        return $fields;
+        /** @var BeforeReturnTwitterQueryFieldsEvent $event */
+        $event = $this->eventDispatcher->dispatch(new BeforeReturnTwitterQueryFieldsEvent($fields));
+        return $event->getFields();
     }
 
     /**

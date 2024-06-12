@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Pixelant\PxaSocialFeed\Feed\Source;
 
+use Pixelant\PxaSocialFeed\Event\FacebookEndPointEvent;
 use Pixelant\PxaSocialFeed\Exception\InvalidFeedSourceData;
+use Pixelant\PxaSocialFeed\Event\FacebookEndPointRequestFieldsEvent;
 
 /**
  * Class BaseFacebookSource
@@ -26,7 +28,9 @@ abstract class BaseFacebookSource extends BaseSource
 
         $fields = $this->getEndPointFields();
 
-        list($fields) = $this->emitSignal('facebookEndPointRequestFields', [$fields]);
+        /** @var FacebookEndPointRequestFieldsEvent $event */
+        $event = $this->eventDispatcher->dispatch(new FacebookEndPointRequestFieldsEvent($fields));
+        $fields = $event->getFields();
 
         $url = $id . '/' . $endPointEntry;
 
@@ -43,9 +47,9 @@ abstract class BaseFacebookSource extends BaseSource
 
         $endPoint = $this->addFieldsAsGetParametersToUrl($url, $queryParams);
 
-        list($endPoint) = $this->emitSignal('faceBookEndPoint', [$endPoint]);
-
-        return $endPoint;
+        /** @var FacebookEndPointEvent $event */
+        $event = $this->eventDispatcher->dispatch(new FacebookEndPointEvent($endPoint));
+        return $event->getEndPoint();
     }
 
     /**
