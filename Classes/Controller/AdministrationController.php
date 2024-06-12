@@ -122,6 +122,8 @@ final class AdministrationController extends ActionController
             'activeTokenTab' => $activeTokenTab,
             'isTokensValid' => $this->isTokensValid($tokens),
             'isAdmin' => $GLOBALS['BE_USER']->isAdmin(),
+            'tokenTabUri' => $this->uriBuilder->reset()->setArguments(["activeTokenTab" => 1])->build(),
+            'configurationTabUri' => $this->uriBuilder->reset()->setArguments(["activeTokenTab" => 0])->build(),
         ]);
 
         $this->moduleTemplate->setContent($this->view->render());

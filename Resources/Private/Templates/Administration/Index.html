@@ -9,10 +9,10 @@
         <div id="tokens-confs">
             <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
                 <li>
-                    <a id="configurations-tab" class="tab-switch{f:if(condition: activeTokenTab, else: ' active')}" href="#configurations" role="tab" aria-controls="configurations" aria-selected="true"><f:translate key="module.configurations"/></a>
+                    <a id="configurations-tab" class="tab-switch{f:if(condition: activeTokenTab, else: ' active')}" href="{configurationTabUri}" role="tab" aria-controls="configurations" aria-selected="true"><f:translate key="module.configurations"/></a>
                 </li>
                 <li>
-                    <a id="tokens-tab" class="tab-switch{f:if(condition: isTokensValid, then:'', else: 'has-validation-error ')}{f:if(condition: activeTokenTab, then: ' active')}" href="#tokens" data-toggle="tab" role="tab" aria-controls="tokens" aria-selected="false"><f:translate key="module.tokens"/></a>
+                    <a id="tokens-tab" class="tab-switch{f:if(condition: isTokensValid, then:'', else: 'has-validation-error ')}{f:if(condition: activeTokenTab, then: ' active')}" href="{tokenTabUri}" data-toggle="tab" role="tab" aria-controls="tokens" aria-selected="false"><f:translate key="module.tokens"/></a>
                 </li>
             </ul>
 
