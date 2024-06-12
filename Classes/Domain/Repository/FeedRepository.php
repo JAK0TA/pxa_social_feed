@@ -2,14 +2,16 @@
 
 namespace Pixelant\PxaSocialFeed\Domain\Repository;
 
-use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
-use Pixelant\PxaSocialFeed\Domain\Model\Feed;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
-use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use Psr\Http\Message\ServerRequestInterface;
+use Pixelant\PxaSocialFeed\Domain\Model\Feed;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
-use TYPO3\CMS\Extbase\Persistence\Repository;
+use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
+use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 
 /***************************************************************
  *
@@ -58,10 +60,11 @@ class FeedRepository extends Repository
         // Don't respect storage
         $defaultQuerySettings->setRespectStoragePage(false);
 
-        if (TYPO3_MODE === 'BE' || TYPO3_MODE === 'CLI') {
-            // don't add fields from enable columns constraint
-            $defaultQuerySettings->setIgnoreEnableFields(true);
-            $defaultQuerySettings->setEnableFieldsToBeIgnored(['disabled']);
+        if (($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof ServerRequestInterface && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
+          // don't add fields from enable columns constraint
+          $defaultQuerySettings->setIgnoreEnableFields(true);
+          $defaultQuerySettings->setEnableFieldsToBeIgnored(['disabled']);
+
         }
 
         $this->setDefaultQuerySettings($defaultQuerySettings);
@@ -79,10 +82,10 @@ class FeedRepository extends Repository
         $query = $this->createQuery();
 
         $query->matching(
-            $query->logicalAnd([
+            $query->logicalAnd(
                 $query->logicalNot($query->in('uid', $storage)),
-                $query->equals('configuration', $configuration),
-            ])
+                $query->equals('configuration', $configuration)
+            )
         );
 
         return $query->execute();

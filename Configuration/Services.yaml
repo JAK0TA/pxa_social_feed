@@ -10,3 +10,6 @@ services:
     exclude:
       - '../Classes/Domain/Model/*'
       - '../Classes/Controller/AdministrationController.php'
+
+  Pixelant\PxaSocialFeed\Controller\AdministrationController:
+    public: true
