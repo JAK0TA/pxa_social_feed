@@ -21,6 +21,8 @@ use Doctrine\DBAL\Driver\Exception as DriverException;
 use Pixelant\PxaSocialFeed\Domain\Model\Configuration;
 use Pixelant\PxaSocialFeed\Domain\Model\FileReference;
 use Pixelant\PxaSocialFeed\Domain\Repository\FeedRepository;
+use Pixelant\PxaSocialFeed\Event\ChangeFeedItemEvent;
+use Pixelant\PxaSocialFeed\Event\RemoveFeedItemEvent;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Extbase\Reflection\Exception\UnknownClassException;
@@ -80,11 +82,9 @@ abstract class BaseUpdater implements FeedUpdaterInterface
             /** @var Feed $feedToRemove */
             foreach ($this->feedRepository->findNotInStorage($this->feeds, $configuration) as $feedToRemove) {
                 // todo: remove in next major version
-                /** @deprecated The call to changedFeedItem is deprecated and will be removed in version 4 */
-                $this->getSignalSlotDispatcher()->dispatch(__CLASS__, 'changedFeedItem', [$feedToRemove]);
-
-                $this->getSignalSlotDispatcher()->dispatch(__CLASS__, 'removedFeedItem', [$feedToRemove]);
-                $this->feedRepository->remove($feedToRemove);
+                /** @var RemoveFeedItemEvent $feedItemRemoveEvent */
+                $feedItemRemoveEvent = $this->eventDispatcher->dispatch(new RemoveFeedItemEvent($feedToRemove));
+                $this->feedRepository->remove($feedItemRemoveEvent->getFeedItem());
             }
         }
     }
@@ -99,7 +99,9 @@ abstract class BaseUpdater implements FeedUpdaterInterface
     {
         // Check if $feed is new or modified and emit change event
         if ($feed->_isDirty() || $feed->_isNew()) {
-            $this->getSignalSlotDispatcher()->dispatch(__CLASS__, 'changedFeedItem', [$feed]);
+            /** @var ChangeFeedItemEvent $feedItemChangeEvent */
+            $feedItemChangeEvent = $this->eventDispatcher->dispatch(new ChangeFeedItemEvent($feed));
+            $feed = $feedItemChangeEvent->getFeedItem();
         }
 
         $this->feeds->attach($feed);
